@@ -12,9 +12,7 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:agentloom.openWebview"
-  ],
+  "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
