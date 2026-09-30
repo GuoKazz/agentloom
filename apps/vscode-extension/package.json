@@ -33,7 +33,7 @@
     "test": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/test/suite/extensionTests.js",
     "pretest": "pnpm run compile-web",
     "vscode:prepublish": "pnpm run package-web",
-    "build-webview": "node scripts/build-webview.mjs",
+    "build-webview": "pnpm --filter @agentloom/webview-ui build",
     "compile-web": "pnpm run check-types && pnpm run lint && pnpm run build:extension && pnpm run build:test && pnpm run build-webview",
     "watch-web:rollup": "rollup -c rollup.config.mjs --watch",
     "watch-web:tsc": "tsc --noEmit --watch --project tsconfig.json",

@@ -1,0 +1,47 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "dev: webview",
+			"type": "npm",
+			"script": "dev",
+			"cwd": "${workspaceFolder}/packages/webview-ui",
+			"isBackground": true,
+			"problemMatcher": [],
+			"presentation": {
+				"reveal": "never",
+				"group": "dev"
+			}
+		},
+		{
+			"label": "dev: extension",
+			"type": "npm",
+			"script": "watch-web:rollup",
+			"cwd": "${workspaceFolder}/apps/vscode-extension",
+			"isBackground": true,
+			"problemMatcher": [],
+			"presentation": {
+				"reveal": "never",
+				"group": "dev"
+			}
+		},
+		{
+			"label": "dev: all",
+			"dependsOn": ["dev: webview", "dev: extension"],
+			"presentation": {
+				"reveal": "never"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "build: prod",
+			"type": "npm",
+			"script": "compile-web",
+			"cwd": "${workspaceFolder}/apps/vscode-extension",
+			"problemMatcher": ["$tsc", "$eslint-compact"],
+			"presentation": {
+				"reveal": "silent"
+			}
+		}
+	]
+}

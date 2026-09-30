@@ -12,5 +12,13 @@ export const COMMANDS = {
 /** Stable webview viewType used by VS Code WebviewPanelSerializer (future-proof). */
 export const WEBVIEW_VIEW_TYPE = 'agentloom.webview';
 
-/** Path relative to extension root where `build-webview.mjs --dev` writes the live vite port. */
-export const DEV_PORT_MARKER = 'dist/webview/.dev-port';
+/**
+ * Port the webview dev server is expected to listen on. The extension reads
+ * `process.env.WEBVIEW_DEV_PORT` at runtime; if set, we treat it as dev mode
+ * and route the webview to `http://127.0.0.1:${port}` via portMapping.
+ *
+ * This is the value the root `.vscode/launch.json` injects for the Dev
+ * configuration. The constant exists only so tests / scripts can reference a
+ * single source of truth.
+ */
+export const DEFAULT_WEBVIEW_DEV_PORT = 5173;

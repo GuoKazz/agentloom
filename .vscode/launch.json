@@ -1,0 +1,35 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Run Extension (Dev)",
+			"type": "extensionHost",
+			"request": "launch",
+			"args": ["--extensionDevelopmentPath=${workspaceFolder}/apps/vscode-extension"],
+			"outFiles": ["${workspaceFolder}/apps/vscode-extension/dist/**/*.js"],
+			"preLaunchTask": "dev: all",
+			"env": {
+				"WEBVIEW_DEV_PORT": "5173"
+			}
+		},
+		{
+			"name": "Run Extension (Prod)",
+			"type": "extensionHost",
+			"request": "launch",
+			"args": ["--extensionDevelopmentPath=${workspaceFolder}/apps/vscode-extension"],
+			"outFiles": ["${workspaceFolder}/apps/vscode-extension/dist/**/*.js"],
+			"preLaunchTask": "build: prod"
+		},
+		{
+			"name": "Extension Tests",
+			"type": "extensionHost",
+			"request": "launch",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}/apps/vscode-extension",
+				"--extensionTestsPath=${workspaceFolder}/apps/vscode-extension/dist/test/suite/extensionTests"
+			],
+			"outFiles": ["${workspaceFolder}/apps/vscode-extension/dist/**/*.js"],
+			"preLaunchTask": "build: prod"
+		}
+	]
+}

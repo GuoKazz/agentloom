@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
-import { DISPLAY_NAME, WEBVIEW_VIEW_TYPE } from '../constants';
-import { readDevPort } from './ports';
+import { DEFAULT_WEBVIEW_DEV_PORT, DISPLAY_NAME, WEBVIEW_VIEW_TYPE } from '../constants';
 import { buildHtml } from './html';
 
 /**
@@ -12,6 +11,12 @@ import { buildHtml } from './html';
  *
  * Lifecycle is owned by the caller: drop the returned disposable into
  * `context.subscriptions` so the panel goes away on extension deactivation.
+ *
+ * Dev mode is signalled by the `WEBVIEW_DEV_PORT` env var (set by the root
+ * `.vscode/launch.json` Dev configuration). When present, we point the
+ * webview at the live vite dev server; otherwise we serve the bundled HTML
+ * that `pnpm --filter @agentloom/webview-ui build` emitted into
+ * `apps/vscode-extension/dist/webview`.
  */
 export class WebviewPanelManager implements vscode.Disposable {
 	private panel: vscode.WebviewPanel | undefined;
@@ -25,7 +30,7 @@ export class WebviewPanelManager implements vscode.Disposable {
 			return;
 		}
 
-		const devPort = await readDevPort(vscode.workspace.fs, this.context.extensionUri);
+		const devPort = readDevPort();
 		if (devPort !== undefined) {
 			console.log(`[${DISPLAY_NAME}] dev mode: routing localhost:${devPort} to vite`);
 		}
@@ -62,4 +67,16 @@ export class WebviewPanelManager implements vscode.Disposable {
 		this.panel?.dispose();
 		this.panel = undefined;
 	}
+}
+
+/**
+ * Read the dev port from the environment. Returns `undefined` when the env var
+ * is unset, empty, or non-numeric — in every one of those cases the caller
+ * falls back to the production HTML loader.
+ */
+function readDevPort(): number | undefined {
+	const raw = process.env.WEBVIEW_DEV_PORT;
+	if (!raw) return undefined;
+	const n = Number(raw);
+	return Number.isFinite(n) && n > 0 ? n : DEFAULT_WEBVIEW_DEV_PORT;
 }
