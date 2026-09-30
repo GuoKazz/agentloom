@@ -29,32 +29,42 @@
 pnpm install
 ```
 
-### Develop the extension (two-step)
+### Develop the extension (recommended: two terminals)
 
-The VS Code extension has two watchers running during development: the webview (Vite) and the extension host code (Rollup). They are independent processes, so we run them in a terminal and then launch the Extension Host from VS Code.
+The VS Code extension has two independent watchers during development:
 
-**Step 1 — Terminal: start both watchers**
+- **Vite** serves the React webview with HMR at <http://127.0.0.1:5173>
+- **Rollup** watches the extension host code and rebuilds `dist/extension.js`
+
+They are decoupled — one failing doesn't take the other down, and each has its own log stream. We run them in two separate terminals so each output stays readable.
+
+**Terminal 1 — webview**
 
 ```bash
-pnpm run dev
+pnpm run dev:webview
+# → vite ready in ~400ms
+# → http://127.0.0.1:5173/
 ```
 
-This runs `concurrently` to start:
+**Terminal 2 — extension host**
 
-- `pnpm --filter @agentloom/webview-ui run dev` — Vite dev server at <http://127.0.0.1:5173>
-- `pnpm --filter @agentloom/vscode-extension run watch-web:rollup` — Rollup watching the extension code
+```bash
+pnpm run dev:extension
+# → rollup watching src/**/*.ts
+# → created dist/extension.js in <2s
+```
 
-Leave this terminal open. Edit any file under `packages/webview-ui/src/**` and the webview hot-reloads; edit `apps/vscode-extension/src/**` and Rollup rebuilds `dist/extension.js`.
-
-**Step 2 — VS Code: launch the extension**
+**VS Code — launch**
 
 Open the repo root in VS Code and press <kbd>F5</kbd>. Pick **"Run Extension (Dev)"**.
 
-A new VS Code window opens with the extension loaded. The webview routes to the live Vite dev server (`WEBVIEW_DEV_PORT=5173` is set in the launch config).
+A new VS Code window opens with the extension loaded. The webview iframes the live Vite dev server (the `WEBVIEW_DEV_PORT=5173` env var in `.vscode/launch.json` makes the extension point at it).
 
-**Step 3 — Tear down**
+**Tear down**
 
-Stop the VS Code debug session, then <kbd>Ctrl+C</kbd> in the terminal to stop both watchers.
+Stop the VS Code debug session, then <kbd>Ctrl+C</kbd> in each terminal.
+
+> If you'd rather see both streams interleaved in one terminal, `pnpm run dev` runs them via `concurrently`. Trade-off: a noisy single stream vs. two quiet ones.
 
 ### Build & verify production mode (one-step)
 
@@ -62,9 +72,11 @@ For a sanity check that the production build works end-to-end, pick **"Run Exten
 
 ### Scripts
 
-| Script             | What it does                                                                  |
-| ------------------ | ----------------------------------------------------------------------------- |
-| `pnpm run dev`     | Webview (Vite) + extension host (Rollup) watchers via `concurrently`           |
-| `pnpm typecheck`   | Runs each workspace package's own `typecheck` script                          |
-| `pnpm run lint`    | ESLint across the tree                                                         |
-| `pnpm run format`  | Prettier across the tree                                                       |
+| Script                  | What it does                                                                  |
+| ----------------------- | ----------------------------------------------------------------------------- |
+| `pnpm run dev:webview`  | Vite dev server for the webview (port 5173)                                   |
+| `pnpm run dev:extension`| Rollup watch for the extension host code                                       |
+| `pnpm run dev`          | Both watchers in one terminal (via `concurrently`)                            |
+| `pnpm typecheck`        | Runs each workspace package's own `typecheck` script                          |
+| `pnpm run lint`         | ESLint across the tree                                                         |
+| `pnpm run format`       | Prettier across the tree                                                       |
