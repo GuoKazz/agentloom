@@ -1,0 +1,69 @@
+{
+  "name": "@agentloom/vscode-extension",
+  "displayName": "AgentLoom",
+  "description": "AgentLoom VS Code extension — agent platform embedded as a webview panel.",
+  "version": "0.0.1",
+  "publisher": "agentloom",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "vscode": "^1.138.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "agentloom.helloWorld",
+        "title": "Hello World"
+      },
+      {
+        "command": "agentloom.openWebview",
+        "title": "Open AgentLoom Webview"
+      }
+    ]
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/test/suite/extensionTests.js",
+    "pretest": "pnpm run compile-web",
+    "vscode:prepublish": "pnpm run package-web",
+    "build-webview": "node scripts/build-webview.mjs",
+    "compile-web": "pnpm run check-types && pnpm run lint && pnpm run build:extension && pnpm run build:test && pnpm run build-webview",
+    "watch-web:rollup": "rollup -c rollup.config.mjs --watch",
+    "watch-web:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package-web": "pnpm run check-types && pnpm run lint && cross-env NODE_ENV=production pnpm run build:extension && cross-env NODE_ENV=production pnpm run build:test && pnpm run build-webview",
+    "build:extension": "rollup -c rollup.config.mjs --environment NODE_ENV:production",
+    "build:test": "rollup -c rollup.config.mjs --environment NODE_ENV:test",
+    "build": "pnpm run compile-web",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ."
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.9",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-replace": "^6.0.3",
+    "@rollup/plugin-terser": "^1.0.0",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.138.0",
+    "@vscode/test-web": "^0.0.81",
+    "eslint": "^10.5.0",
+    "mocha": "^11.7.6",
+    "rollup": "^4.63.5",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.1"
+  },
+  "overrides": {
+    "diff": "^8.0.4",
+    "serialize-javascript": "^7.0.6"
+  }
+}
