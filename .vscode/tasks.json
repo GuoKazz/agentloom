@@ -3,9 +3,9 @@
 	"tasks": [
 		{
 			"label": "dev: webview",
-			"type": "npm",
-			"script": "dev",
-			"cwd": "${workspaceFolder}/packages/webview-ui",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["--filter", "@agentloom/webview-ui", "run", "dev"],
 			"isBackground": true,
 			"problemMatcher": [],
 			"presentation": {
@@ -15,9 +15,9 @@
 		},
 		{
 			"label": "dev: extension",
-			"type": "npm",
-			"script": "watch-web:rollup",
-			"cwd": "${workspaceFolder}/apps/vscode-extension",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["--filter", "@agentloom/vscode-extension", "run", "watch-web:rollup"],
 			"isBackground": true,
 			"problemMatcher": [],
 			"presentation": {
@@ -35,9 +35,9 @@
 		},
 		{
 			"label": "build: prod",
-			"type": "npm",
-			"script": "compile-web",
-			"cwd": "${workspaceFolder}/apps/vscode-extension",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["--filter", "@agentloom/vscode-extension", "run", "compile-web"],
 			"problemMatcher": ["$tsc", "$eslint-compact"],
 			"presentation": {
 				"reveal": "silent"

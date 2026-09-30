@@ -9,7 +9,9 @@
     "format": "prettier --write --cache .",
     "lint": "eslint --cache .",
     "typecheck": "pnpm -r run typecheck",
-    "dev:foo": "pnpm run -C packages/foo dev",
+    "dev": "pnpm --parallel run dev:webview dev:extension",
+    "dev:webview": "pnpm --filter @agentloom/webview-ui run dev",
+    "dev:extension": "pnpm --filter @agentloom/vscode-extension run watch-web:rollup",
     "build:foo": "pnpm run -C packages/foo build",
     "test:foo": "pnpm run -C packages/foo test"
   },
