@@ -1,3 +1,18 @@
 packages:
   - 'apps/*'
   - 'packages/*'
+
+# pnpm 11 blocks postinstall scripts by default. We list the ones we actually
+# need so esbuild can compile its native binding (vite/rollup depend on it)
+# and so playwright can fetch its browser binary for e2e tests.
+#
+# `onlyBuiltDependencies` is the legacy list-style knob; `allowBuilds` is the
+# new pnpm 11 explicit-permission knob. We set both so the config stays
+# portable across pnpm 10/11 and avoids the placeholder warning.
+onlyBuiltDependencies:
+  - esbuild
+  - '@playwright/browser-chromium'
+
+allowBuilds:
+  esbuild: true
+  '@playwright/browser-chromium': true

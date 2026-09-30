@@ -19,6 +19,7 @@
   "scripts": {
     "dev": "tsx --env-file=.env src/index.ts",
     "build": "rollup -c rollup.config.ts --configPlugin typescript",
-    "test": "vitest run"
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
   }
 }
