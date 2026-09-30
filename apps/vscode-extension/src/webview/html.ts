@@ -3,31 +3,63 @@ import * as vscode from 'vscode';
 /**
  * Build the HTML string to assign to a webview's `.html` property.
  *
- * Pure-ish function: the only side effect is reading the on-disk index.html via
- * the VS Code FileSystem API (so it works in the web extension host where Node's
- * `fs` is unavailable). Asset paths are rewritten through `webview.asWebviewUri`,
- * and a CSP is injected that reflects whether we're in dev mode (live vite) or
- * production (static dist).
+ * - **Production** (`devPort === undefined`): read the bundled `index.html`
+ *   that `pnpm --filter @agentloom/webview-ui build` emitted under
+ *   `dist/webview/`. Asset paths are rewritten through `webview.asWebviewUri`,
+ *   and a strict CSP is injected.
  *
- * Kept side-effect-free beyond the read so it can be unit-tested with a stub
- * `Webview` and stub `FileSystem`.
+ * - **Development** (`devPort` set): generate an inline HTML that loads the
+ *   Vite dev server directly (`/@vite/client` + `/src/main.tsx`). This avoids
+ *   needing a written-to-disk build artefact during dev (Vite serves from
+ *   memory in `vite dev` mode) and gives us HMR for free.
+ *
+ * Kept side-effect-free beyond the file read so it can be unit-tested with a
+ * stub `Webview` and stub `FileSystem`.
  */
 export async function buildHtml(
 	webview: vscode.Webview,
 	indexHtmlUri: vscode.Uri,
 	devPort: number | undefined,
 ): Promise<string> {
+	if (devPort !== undefined) {
+		return buildDevHtml(webview, devPort);
+	}
+
 	const raw = await vscode.workspace.fs.readFile(indexHtmlUri);
 	let html = new TextDecoder().decode(raw);
 
 	// Resolve any relative src/href through asWebviewUri so production loads work.
 	html = rewriteRelativeAssets(html, webview, indexHtmlUri);
 
-	// CSP: production is strict, dev relaxes to allow the vite origin + ws.
-	const csp = buildCsp(webview.cspSource, devPort);
+	// CSP: production is strict.
+	const csp = buildCsp(webview.cspSource, undefined);
 	html = html.replace(/<head>/, `<head>\n<meta http-equiv="Content-Security-Policy" content="${csp}">`);
 
 	return html;
+}
+
+/**
+ * Dev-mode HTML: a minimal shell that loads the React app from the live Vite
+ * dev server. Vite's HMR client (`/@vite/client`) is injected first so any
+ * source edit under `packages/webview-ui/src/**` propagates without reload.
+ */
+function buildDevHtml(webview: vscode.Webview, devPort: number): string {
+	const origin = `http://127.0.0.1:${devPort}`;
+	const csp = buildCsp(webview.cspSource, devPort);
+	return `<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="Content-Security-Policy" content="${csp}">
+	<title>AgentLoom</title>
+</head>
+<body>
+	<div id="root"></div>
+	<script type="module" src="${origin}/@vite/client"></script>
+	<script type="module" src="${origin}/src/main.tsx"></script>
+</body>
+</html>`;
 }
 
 /** Rewrite asset references in `<script>` / `<link>` to webview URIs. */
@@ -53,8 +85,10 @@ function buildCsp(cspSource: string, devPort: number | undefined): string {
 		const wsOrigin = `ws://127.0.0.1:${devPort}`;
 		return [
 			`default-src 'self' ${cspSource} ${origin}`,
-			`script-src 'self' ${cspSource} ${origin} 'unsafe-inline'`,
+			`script-src 'self' ${cspSource} ${origin} 'unsafe-inline' 'unsafe-eval'`,
 			`style-src 'self' ${cspSource} ${origin} 'unsafe-inline'`,
+			`img-src ${cspSource} ${origin} data:`,
+			`font-src ${cspSource} ${origin} data:`,
 			`connect-src ${cspSource} ${origin} ${wsOrigin}`,
 		].join('; ');
 	}
