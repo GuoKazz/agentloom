@@ -1,50 +1,50 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "dev: webview",
-			"type": "shell",
-			"command": "pnpm",
-			"args": ["--filter", "@agentloom/webview-ui", "run", "dev"],
-			"isBackground": true,
-			"problemMatcher": [],
-			"presentation": {
-				"reveal": "always",
-				"panel": "dedicated",
-				"group": "dev"
-			}
-		},
-		{
-			"label": "dev: extension",
-			"type": "shell",
-			"command": "pnpm",
-			"args": ["--filter", "@agentloom/vscode-extension", "run", "dev:bundle"],
-			"isBackground": true,
-			"problemMatcher": [],
-			"presentation": {
-				"reveal": "always",
-				"panel": "dedicated",
-				"group": "dev"
-			}
-		},
-		{
-			"label": "dev: both",
-			"dependsOn": ["dev: webview", "dev: extension"],
-			"dependsOrder": "parallel",
-			"presentation": {
-				"reveal": "always"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "build: prod",
-			"type": "shell",
-			"command": "pnpm",
-			"args": ["--filter", "@agentloom/vscode-extension", "run", "compile-web"],
-			"problemMatcher": ["$tsc", "$eslint-compact"],
-			"presentation": {
-				"reveal": "silent"
-			}
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "dev: webview",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["--filter", "@agentloom/webview-ui", "run", "dev"],
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "dev"
+      }
+    },
+    {
+      "label": "dev: extension",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["--filter", "@agentloom/vscode-extension", "run", "dev:bundle"],
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "dev"
+      }
+    },
+    {
+      "label": "dev: both",
+      "dependsOn": ["dev: webview", "dev: extension"],
+      "dependsOrder": "parallel",
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "build: prod",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["--filter", "@agentloom/vscode-extension", "run", "compile-web"],
+      "problemMatcher": ["$tsc", "$eslint-compact"],
+      "presentation": {
+        "reveal": "silent"
+      }
+    }
+  ]
 }

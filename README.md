@@ -9,11 +9,11 @@
 
 ## Workspace
 
-| Path                                       | Kind     | Description                                                  |
-| ------------------------------------------ | :------- | :----------------------------------------------------------- |
-| [`apps/gui`](apps/gui)                                  | app      | Vite + React desktop-style GUI                               |
-| [`apps/vscode-extension`](apps/vscode-extension)         | app      | VS Code extension with embedded webview panel                |
-| [`packages/webview-ui`](packages/webview-ui)             | package  | Shared React webview UI consumed by the VS Code extension   |
+| Path                                             | Kind    | Description                                               |
+| ------------------------------------------------ | :------ | :-------------------------------------------------------- |
+| [`apps/gui`](apps/gui)                           | app     | Vite + React desktop-style GUI                            |
+| [`apps/vscode-extension`](apps/vscode-extension) | app     | VS Code extension with embedded webview panel             |
+| [`packages/webview-ui`](packages/webview-ui)     | package | Shared React webview UI consumed by the VS Code extension |
 
 ## Development
 
@@ -73,11 +73,11 @@ For a sanity check that the production build works end-to-end, pick **"Run Exten
 
 ### Scripts
 
-| Script                  | What it does                                                                  |
-| ----------------------- | ----------------------------------------------------------------------------- |
-| `pnpm run dev:webview`  | Vite dev server for the webview (port 5173)                                   |
-| `pnpm run dev:extension`| tsup watch for the extension host code                                         |
-| `pnpm run dev`          | Both watchers in one terminal (via `concurrently`)                            |
-| `pnpm typecheck`        | Runs each workspace package's own `typecheck` script                          |
-| `pnpm run lint`         | ESLint across the tree                                                         |
-| `pnpm run format`       | Prettier across the tree                                                       |
+| Script                   | What it does                                         |
+| ------------------------ | ---------------------------------------------------- |
+| `pnpm run dev:webview`   | Vite dev server for the webview (port 5173)          |
+| `pnpm run dev:extension` | tsup watch for the extension host code               |
+| `pnpm run dev`           | Both watchers in one terminal (via `concurrently`)   |
+| `pnpm typecheck`         | Runs each workspace package's own `typecheck` script |
+| `pnpm run lint`          | ESLint across the tree                               |
+| `pnpm run format`        | Prettier across the tree                             |

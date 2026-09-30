@@ -1,6 +1,6 @@
-import * as vscode from 'vscode';
-import { COMMANDS } from '../constants';
-import { WebviewPanelManager } from '../webview/panel';
+import * as vscode from 'vscode'
+import { COMMANDS } from '../constants'
+import { WebviewPanelManager } from '../webview/panel'
 
 /**
  * Wire the `agentloom.openWebview` command to a long-lived panel manager.
@@ -10,12 +10,12 @@ import { WebviewPanelManager } from '../webview/panel';
  * `show()` — the manager handles singleton, dev-mode probing, and HTML loading.
  */
 export function registerOpenWebview(context: vscode.ExtensionContext): void {
-	const manager = new WebviewPanelManager(context);
-	context.subscriptions.push(manager);
+  const manager = new WebviewPanelManager(context)
+  context.subscriptions.push(manager)
 
-	context.subscriptions.push(
-		vscode.commands.registerCommand(COMMANDS.openWebview, () => {
-			void manager.show();
-		}),
-	);
+  context.subscriptions.push(
+    vscode.commands.registerCommand(COMMANDS.openWebview, () => {
+      void manager.show()
+    })
+  )
 }

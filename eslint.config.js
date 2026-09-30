@@ -60,6 +60,14 @@ export default defineConfig(
     }
   },
   {
+    // React components don't need explicit return types — JSX inference
+    // is universal in modern codebases.
+    files: ['**/*.tsx'],
+    rules: {
+      '@typescript-eslint/explicit-function-return-type': 'off'
+    }
+  },
+  {
     files: ['**/*.js', '**/*.mjs'],
     rules: {
       '@typescript-eslint/explicit-function-return-type': 'off'

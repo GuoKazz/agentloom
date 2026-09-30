@@ -1,6 +1,10 @@
-import * as vscode from 'vscode';
-import { DEFAULT_WEBVIEW_DEV_PORT, DISPLAY_NAME, WEBVIEW_VIEW_TYPE } from '../constants';
-import { buildHtml } from './html';
+import * as vscode from 'vscode'
+import {
+  DEFAULT_WEBVIEW_DEV_PORT,
+  DISPLAY_NAME,
+  WEBVIEW_VIEW_TYPE
+} from '../constants'
+import { buildHtml } from './html'
 
 /**
  * Singleton manager for the AgentLoom webview panel.
@@ -19,54 +23,67 @@ import { buildHtml } from './html';
  * `apps/vscode-extension/dist/webview`.
  */
 export class WebviewPanelManager implements vscode.Disposable {
-	private panel: vscode.WebviewPanel | undefined;
+  private panel: vscode.WebviewPanel | undefined
 
-	constructor(private readonly context: vscode.ExtensionContext) {}
+  constructor(private readonly context: vscode.ExtensionContext) {}
 
-	/** Reveal the existing panel, or create one and load the built webview. */
-	async show(): Promise<void> {
-		if (this.panel) {
-			this.panel.reveal(vscode.ViewColumn.One);
-			return;
-		}
+  /** Reveal the existing panel, or create one and load the built webview. */
+  async show(): Promise<void> {
+    if (this.panel) {
+      this.panel.reveal(vscode.ViewColumn.One)
+      return
+    }
 
-		const devPort = readDevPort();
-		if (devPort !== undefined) {
-			console.log(`[${DISPLAY_NAME}] dev mode: routing localhost:${devPort} to vite`);
-		}
+    const devPort = readDevPort()
+    if (devPort !== undefined) {
+      console.log(
+        `[${DISPLAY_NAME}] dev mode: routing localhost:${devPort} to vite`
+      )
+    }
 
-		const baseOptions: vscode.WebviewPanelOptions & vscode.WebviewOptions = {
-			enableScripts: true,
-			retainContextWhenHidden: true,
-			localResourceRoots: [vscode.Uri.joinPath(this.context.extensionUri, 'dist')],
-		};
-		const panelOptions: vscode.WebviewPanelOptions & vscode.WebviewOptions = devPort !== undefined
-			? { ...baseOptions, portMapping: [{ webviewPort: devPort, extensionHostPort: devPort }] }
-			: baseOptions;
+    const baseOptions: vscode.WebviewPanelOptions & vscode.WebviewOptions = {
+      enableScripts: true,
+      retainContextWhenHidden: true,
+      localResourceRoots: [
+        vscode.Uri.joinPath(this.context.extensionUri, 'dist')
+      ]
+    }
+    const panelOptions: vscode.WebviewPanelOptions & vscode.WebviewOptions =
+      devPort !== undefined
+        ? {
+            ...baseOptions,
+            portMapping: [{ webviewPort: devPort, extensionHostPort: devPort }]
+          }
+        : baseOptions
 
-		const panel = vscode.window.createWebviewPanel(
-			WEBVIEW_VIEW_TYPE,
-			DISPLAY_NAME,
-			vscode.ViewColumn.One,
-			panelOptions,
-		);
+    const panel = vscode.window.createWebviewPanel(
+      WEBVIEW_VIEW_TYPE,
+      DISPLAY_NAME,
+      vscode.ViewColumn.One,
+      panelOptions
+    )
 
-		const indexHtml = vscode.Uri.joinPath(this.context.extensionUri, 'dist', 'webview', 'index.html');
-		panel.webview.html = await buildHtml(panel.webview, indexHtml, devPort);
+    const indexHtml = vscode.Uri.joinPath(
+      this.context.extensionUri,
+      'dist',
+      'webview',
+      'index.html'
+    )
+    panel.webview.html = await buildHtml(panel.webview, indexHtml, devPort)
 
-		panel.onDidDispose(() => {
-			if (this.panel === panel) {
-				this.panel = undefined;
-			}
-		});
+    panel.onDidDispose(() => {
+      if (this.panel === panel) {
+        this.panel = undefined
+      }
+    })
 
-		this.panel = panel;
-	}
+    this.panel = panel
+  }
 
-	dispose(): void {
-		this.panel?.dispose();
-		this.panel = undefined;
-	}
+  dispose(): void {
+    this.panel?.dispose()
+    this.panel = undefined
+  }
 }
 
 /**
@@ -75,8 +92,8 @@ export class WebviewPanelManager implements vscode.Disposable {
  * falls back to the production HTML loader.
  */
 function readDevPort(): number | undefined {
-	const raw = process.env.WEBVIEW_DEV_PORT;
-	if (!raw) return undefined;
-	const n = Number(raw);
-	return Number.isFinite(n) && n > 0 ? n : DEFAULT_WEBVIEW_DEV_PORT;
+  const raw = process.env.WEBVIEW_DEV_PORT
+  if (!raw) return undefined
+  const n = Number(raw)
+  return Number.isFinite(n) && n > 0 ? n : DEFAULT_WEBVIEW_DEV_PORT
 }
