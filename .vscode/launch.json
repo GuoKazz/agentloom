@@ -7,7 +7,6 @@
 			"request": "launch",
 			"args": ["--extensionDevelopmentPath=${workspaceFolder}/apps/vscode-extension"],
 			"outFiles": ["${workspaceFolder}/apps/vscode-extension/dist/**/*.js"],
-			"preLaunchTask": "dev: all",
 			"env": {
 				"WEBVIEW_DEV_PORT": "5173"
 			}
