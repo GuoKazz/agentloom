@@ -39,7 +39,7 @@
     "compile-web": "pnpm run typecheck && pnpm run lint && pnpm run build && pnpm run build-webview",
     "package-web": "cross-env NODE_ENV=production pnpm run compile-web",
     "build": "tsup",
-    "dev:rollup": "tsup --watch",
+    "dev:bundle": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src",
     "run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ."

@@ -3,7 +3,7 @@ packages:
   - 'packages/*'
 
 # pnpm 11 blocks postinstall scripts by default. We list the ones we actually
-# need so esbuild can compile its native binding (vite/rollup depend on it)
+# need so esbuild can compile its native binding (vite and tsup depend on it)
 # and so playwright can fetch its browser binary for e2e tests.
 #
 # `onlyBuiltDependencies` is the legacy list-style knob; `allowBuilds` is the

@@ -13,7 +13,6 @@
 | ------------------------------------------ | :------- | :----------------------------------------------------------- |
 | [`apps/gui`](apps/gui)                                  | app      | Vite + React desktop-style GUI                               |
 | [`apps/vscode-extension`](apps/vscode-extension)         | app      | VS Code extension with embedded webview panel                |
-| [`packages/foo`](packages/foo)                          | package  | Minimal TypeScript library scaffold (Rollup + Vitest)        |
 | [`packages/webview-ui`](packages/webview-ui)             | package  | Shared React webview UI consumed by the VS Code extension   |
 
 ## Development
@@ -34,7 +33,7 @@ pnpm install
 The VS Code extension has two independent watchers during development:
 
 - **Vite** serves the React webview with HMR at <http://127.0.0.1:5173>
-- **Rollup** watches the extension host code and rebuilds `dist/extension.js`
+- **tsup** watches the extension host code and rebuilds `dist/extension.js`
 
 They are decoupled — one failing doesn't take the other down, and each has its own log stream. We run them in two separate terminals so each output stays readable.
 
@@ -77,7 +76,7 @@ For a sanity check that the production build works end-to-end, pick **"Run Exten
 | Script                  | What it does                                                                  |
 | ----------------------- | ----------------------------------------------------------------------------- |
 | `pnpm run dev:webview`  | Vite dev server for the webview (port 5173)                                   |
-| `pnpm run dev:extension`| Rollup watch for the extension host code                                       |
+| `pnpm run dev:extension`| tsup watch for the extension host code                                         |
 | `pnpm run dev`          | Both watchers in one terminal (via `concurrently`)                            |
 | `pnpm typecheck`        | Runs each workspace package's own `typecheck` script                          |
 | `pnpm run lint`         | ESLint across the tree                                                         |
