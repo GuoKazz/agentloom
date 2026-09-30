@@ -46,18 +46,18 @@ export async function buildHtml(
 function buildDevHtml(webview: vscode.Webview, devPort: number): string {
 	const origin = `http://127.0.0.1:${devPort}`;
 	const csp = buildCsp(webview.cspSource, devPort);
+	// DEBUG: temporarily render literal text to verify HTML assignment path.
 	return `<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta http-equiv="Content-Security-Policy" content="${csp}">
-	<title>AgentLoom</title>
 </head>
-<body>
-	<div id="root"></div>
-	<script type="module" src="${origin}/@vite/client"></script>
-	<script type="module" src="${origin}/src/main.tsx"></script>
+<body style="margin:0;padding:24px;background:#fff7d6;color:#222;font-family:system-ui;font-size:14px;">
+	<h1 style="margin:0 0 8px;">DEBUG: buildDevHtml ran</h1>
+	<p style="margin:4px 0;">vite origin would be: <code>${origin}</code></p>
+	<p style="margin:4px 0;">cspSource: <code>${webview.cspSource}</code></p>
+	<p style="margin:4px 0;color:#888;">If you see this yellow page, HTML assignment works. The next step is to figure out why scripts can't load.</p>
 </body>
 </html>`;
 }
