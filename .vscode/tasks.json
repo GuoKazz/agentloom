@@ -18,7 +18,7 @@
 			"label": "dev: extension",
 			"type": "shell",
 			"command": "pnpm",
-			"args": ["--filter", "@agentloom/vscode-extension", "run", "watch-web:rollup"],
+			"args": ["--filter", "@agentloom/vscode-extension", "run", "dev:rollup"],
 			"isBackground": true,
 			"problemMatcher": [],
 			"presentation": {

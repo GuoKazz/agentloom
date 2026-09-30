@@ -11,7 +11,7 @@
     "typecheck": "pnpm -r run typecheck",
     "dev": "concurrently -n webview,extension -c blue,green npm:dev:webview npm:dev:extension",
     "dev:webview": "pnpm --filter @agentloom/webview-ui run dev",
-    "dev:extension": "pnpm --filter @agentloom/vscode-extension run watch-web:rollup",
+    "dev:extension": "pnpm --filter @agentloom/vscode-extension run dev:rollup",
     "build:foo": "pnpm run -C packages/foo build",
     "test:foo": "pnpm run -C packages/foo test"
   },

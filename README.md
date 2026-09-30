@@ -50,8 +50,8 @@ pnpm run dev:webview
 
 ```bash
 pnpm run dev:extension
-# → rollup watching src/**/*.ts
-# → created dist/extension.js in <2s
+# → tsup watching src/**/*.ts
+# → created dist/extension.js in <1s
 ```
 
 > **One-key alternative inside VS Code**: <kbd>Ctrl+Shift+P</kbd> → "Tasks: Run Task" → **"dev: both"** opens both watchers in two separate dedicated terminal panels (one task per panel).
@@ -70,7 +70,7 @@ Stop the VS Code debug session, then <kbd>Ctrl+C</kbd> in each terminal.
 
 ### Build & verify production mode (one-step)
 
-For a sanity check that the production build works end-to-end, pick **"Run Extension (Prod)"** in the VS Code debug picker. Its `preLaunchTask` runs `compile-web` (tsc + lint + rollup + Vite build) and launches a new window with the bundled assets — no terminal watcher needed.
+For a sanity check that the production build works end-to-end, pick **"Run Extension (Prod)"** in the VS Code debug picker. Its `preLaunchTask` runs `compile-web` (tsc + lint + tsup + Vite build) and launches a new window with the bundled assets — no terminal watcher needed.
 
 ### Scripts
 
