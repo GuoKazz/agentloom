@@ -9,7 +9,8 @@
 			"isBackground": true,
 			"problemMatcher": [],
 			"presentation": {
-				"reveal": "never",
+				"reveal": "always",
+				"panel": "dedicated",
 				"group": "dev"
 			}
 		},
@@ -21,19 +22,19 @@
 			"isBackground": true,
 			"problemMatcher": [],
 			"presentation": {
-				"reveal": "never",
+				"reveal": "always",
+				"panel": "dedicated",
 				"group": "dev"
 			}
 		},
 		{
-			"label": "dev: all",
-			"type": "npm",
-			"script": "dev",
-			"isBackground": true,
-			"problemMatcher": "$tsc-watch",
+			"label": "dev: both",
+			"dependsOn": ["dev: webview", "dev: extension"],
+			"dependsOrder": "parallel",
 			"presentation": {
-				"reveal": "never"
-			}
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
 			"label": "build: prod",

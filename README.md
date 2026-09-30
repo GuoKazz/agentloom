@@ -54,6 +54,8 @@ pnpm run dev:extension
 # → created dist/extension.js in <2s
 ```
 
+> **One-key alternative inside VS Code**: <kbd>Ctrl+Shift+P</kbd> → "Tasks: Run Task" → **"dev: both"** opens both watchers in two separate dedicated terminal panels (one task per panel).
+
 **VS Code — launch**
 
 Open the repo root in VS Code and press <kbd>F5</kbd>. Pick **"Run Extension (Dev)"**.
