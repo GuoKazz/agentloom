@@ -27,11 +27,13 @@
 		},
 		{
 			"label": "dev: all",
-			"dependsOn": ["dev: webview", "dev: extension"],
+			"type": "npm",
+			"script": "dev",
+			"isBackground": true,
+			"problemMatcher": [],
 			"presentation": {
 				"reveal": "never"
-			},
-			"problemMatcher": []
+			}
 		},
 		{
 			"label": "build: prod",
