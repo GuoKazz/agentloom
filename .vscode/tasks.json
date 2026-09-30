@@ -30,7 +30,7 @@
 			"type": "npm",
 			"script": "dev",
 			"isBackground": true,
-			"problemMatcher": [],
+			"problemMatcher": "$tsc-watch",
 			"presentation": {
 				"reveal": "never"
 			}
