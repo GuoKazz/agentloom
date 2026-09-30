@@ -40,24 +40,28 @@ export async function buildHtml(
 
 /**
  * Dev-mode HTML: a minimal shell that loads the React app from the live Vite
- * dev server. Vite's HMR client (`/@vite/client`) is injected first so any
- * source edit under `packages/webview-ui/src/**` propagates without reload.
+ * dev server. We embed Vite inside an `<iframe>` rather than fetching its
+ * scripts directly: VS Code webviews sandbox `<script type="module">` loads
+ * from external origins (even with `portMapping` + `script-src` allowances).
+ * An iframe is a separate browsing context that fetches normally, gets HMR,
+ * and respects the webview's CSP via `frame-src`.
  */
 function buildDevHtml(webview: vscode.Webview, devPort: number): string {
 	const origin = `http://127.0.0.1:${devPort}`;
 	const csp = buildCsp(webview.cspSource, devPort);
-	// DEBUG: temporarily render literal text to verify HTML assignment path.
 	return `<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8" />
 	<meta http-equiv="Content-Security-Policy" content="${csp}">
+	<title>AgentLoom</title>
 </head>
-<body style="margin:0;padding:24px;background:#fff7d6;color:#222;font-family:system-ui;font-size:14px;">
-	<h1 style="margin:0 0 8px;">DEBUG: buildDevHtml ran</h1>
-	<p style="margin:4px 0;">vite origin would be: <code>${origin}</code></p>
-	<p style="margin:4px 0;">cspSource: <code>${webview.cspSource}</code></p>
-	<p style="margin:4px 0;color:#888;">If you see this yellow page, HTML assignment works. The next step is to figure out why scripts can't load.</p>
+<body style="margin:0;padding:0;overflow:hidden;">
+	<iframe
+		src="${origin}/"
+		style="width:100vw;height:100vh;border:none;display:block;"
+		title="AgentLoom Webview"
+	></iframe>
 </body>
 </html>`;
 }
@@ -90,6 +94,7 @@ function buildCsp(cspSource: string, devPort: number | undefined): string {
 			`img-src ${cspSource} ${origin} data:`,
 			`font-src ${cspSource} ${origin} data:`,
 			`connect-src ${cspSource} ${origin} ${wsOrigin}`,
+			`frame-src ${origin}`,
 		].join('; ');
 	}
 	// Production: lock everything down, except inline styles which the React build needs.
